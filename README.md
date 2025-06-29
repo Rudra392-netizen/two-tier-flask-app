@@ -1,130 +1,92 @@
+## 🚀 My Custom Contributions
+
+This repository was originally forked from [shubhamlondhe/two-tier-flask-app](https://github.com/shubhamlondhe/two-tier-flask-app), but I’ve made significant improvements and used it as a learning platform to explore Docker and container networking.
+
+### 🔧 What I Added / Did:
+- 🐳 **Wrote a complete Dockerfile** to containerize the Flask application.
+- 
+- 🌐 **Created a custom Docker network** named `tws-net` to securely connect the Flask app with the MySQL container.
+- 
+- 🧠 Understood and applied concepts like:
+- 
+  - Docker bridge networks
+  - 
+  - Container communication
+  - 
+  - Port mappings and environment variables
+  - 
+- 📦 Successfully tested the setup by running both containers on the same network and accessing the application via browser.
+
+---
+
+## 🐳 How to Run This with Docker Networking
+
+### 1. Clone the Repository
+
+git clone https://github.com/Rudra392-netizen/two-tier-flask-app.git
+
+cd two-tier-flask-app
+
+ ## 2. Create a Docker Network
  
-# Flask App with MySQL Docker Setup
+docker network create tws-net
 
-This is a simple Flask app that interacts with a MySQL database. The app allows users to submit messages, which are then stored in the database and displayed on the frontend.
-
-## Prerequisites
-
-Before you begin, make sure you have the following installed:
-
-- Docker
-- Git (optional, for cloning the repository)
-
-## Setup
-
-1. Clone this repository (if you haven't already):
-
-   ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
-   cd your-repo-name
-   ```
-
-3. Create a `.env` file in the project directory to store your MySQL environment variables:
-
-   ```bash
-   touch .env
-   ```
-
-4. Open the `.env` file and add your MySQL configuration:
-
-   ```
-   MYSQL_HOST=mysql
-   MYSQL_USER=your_username
-   MYSQL_PASSWORD=your_password
-   MYSQL_DB=your_database
-   ```
-
-## Usage
-
-1. Start the containers using Docker Compose:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-2. Access the Flask app in your web browser:
-
-   - Frontend: http://localhost
-   - Backend: http://localhost:5000
-
-3. Create the `messages` table in your MySQL database:
-
-   - Use a MySQL client or tool (e.g., phpMyAdmin) to execute the following SQL commands:
+## 3. Run MySQL Container
    
-     ```sql
-     CREATE TABLE messages (
-         id INT AUTO_INCREMENT PRIMARY KEY,
-         message TEXT
-     );
-     ```
-
-4. Interact with the app:
-
-   - Visit http://localhost to see the frontend. You can submit new messages using the form.
-   - Visit http://localhost:5000/insert_sql to insert a message directly into the `messages` table via an SQL query.
-
-## Cleaning Up
-
-To stop and remove the Docker containers, press `Ctrl+C` in the terminal where the containers are running, or use the following command:
-
-```bash
-docker-compose down
-```
-
-## To run this two-tier application using  without docker-compose
-
-- First create a docker image from Dockerfile
-```bash
-docker build -t flaskapp .
-```
-
-- Now, make sure that you have created a network using following command
-```bash
-docker network create twotier
-```
-
-- Attach both the containers in the same network, so that they can communicate with each other
-
-i) MySQL container 
-```bash
 docker run -d \
-    --name mysql \
-    -v mysql-data:/var/lib/mysql \
-    --network=twotier \
-    -e MYSQL_DATABASE=mydb \
-    -e MYSQL_ROOT_PASSWORD=admin \
-    -p 3306:3306 \
-    mysql:5.7
 
-```
-ii) Backend container
-```bash
+  --name mysql-db \
+  
+  --network tws-net \
+  
+  -e MYSQL_ROOT_PASSWORD=root \
+  
+  -e MYSQL_DATABASE=students \
+  
+  mysql:5.7
+
+## 4. Build the Flask App Docker Image 
+
+docker build -t flask-app .
+
+## 5. Run the Flask App Container
+
 docker run -d \
-    --name flaskapp \
-    --network=twotier \
-    -e MYSQL_HOST=mysql \
-    -e MYSQL_USER=root \
-    -e MYSQL_PASSWORD=admin \
-    -e MYSQL_DB=mydb \
-    -p 5000:5000 \
-    flaskapp:latest
 
-```
+  --name flask-app \
+  
+  --network tws-net \
+  
+  -p 5000:5000 \
+  
+  flask-app
 
-## Notes
+##  6. Access the App
 
-- Make sure to replace placeholders (e.g., `your_username`, `your_password`, `your_database`) with your actual MySQL configuration.
+Open browser and visit:
 
-- This is a basic setup for demonstration purposes. In a production environment, you should follow best practices for security and performance.
+👉 http://localhost:5000
 
-- Be cautious when executing SQL queries directly. Validate and sanitize user inputs to prevent vulnerabilities like SQL injection.
+🙏 Credits
+This project was originally forked from shubhamlondhe/two-tier-flask-app.
+I used it to practice Docker concepts and enhance my understanding of real-world deployments.
 
-- If you encounter issues, check Docker logs and error messages for troubleshooting.
 
-```
+---
 
+## ✅ Bonus Tip
+
+You can also **pin a GitHub issue** or add a `LEARNING.md` file with:
+
+```markdown
+# What I Learned
+
+- Dockerfile creation from scratch
+
+- How to build and run containers
+
+- Docker bridge networks
+
+- MySQL container environment variables
+
+- Connecting containers via custom network
