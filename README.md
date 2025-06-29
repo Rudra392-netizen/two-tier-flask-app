@@ -4,15 +4,10 @@ This repository was originally forked from [shubhamlondhe/two-tier-flask-app](ht
 
 ### 🔧 What I Added / Did:
 - 🐳 **Wrote a complete Dockerfile** to containerize the Flask application.
-- 
 - 🌐 **Created a custom Docker network** named `tws-net` to securely connect the Flask app with the MySQL container.
-- 
 - 🧠 Understood and applied concepts like:
-- 
   - Docker bridge networks
-  - 
   - Container communication
-  - 
   - Port mappings and environment variables
   - 
 - 📦 Successfully tested the setup by running both containers on the same network and accessing the application via browser.
