@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   mysql:
-    container_name: mysql
     image: mysql
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: "devops"
@@ -12,41 +12,41 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
-      - two-tier
-    restart: always  
-    healthcheck: 
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      - tws-net
+    restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
       interval: 30s
-      timeout: 10s
       retries: 5
+      start_period: 10s
+      timeout: 10s
 
   flask:
     build:
       context: .
     container_name: two-tier-backend
-    ports:
-      - "5000:5000"
     environment:
       MYSQL_HOST: mysql
-      MYSQL_USER: root
       MYSQL_DB: devops
+      MYSQL_USER: root
       MYSQL_PASSWORD: root
-    networks:
-      - two-tier
+    ports:
+      - "5000:5000"
+    restart: always
     depends_on:
       - mysql
-    restart: always  
+    networks:
+      - tws-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
+      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
       retries: 5
+      interval: 10s
       start_period: 10s
+      timeout: 10s
 
 volumes:
   mysql-data:
 
+
 networks:
-  two-tier:
-
-
+  tws-net:
